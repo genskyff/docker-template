@@ -1,6 +1,6 @@
 FROM rust:latest
-WORKDIR /app
+WORKDIR /backend
 COPY . .
-RUN cargo build
+RUN cargo build -r
 EXPOSE 3000
-CMD ["cargo", "run"]
+CMD ["cargo", "run", "-r"]
