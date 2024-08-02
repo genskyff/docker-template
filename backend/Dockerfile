@@ -2,5 +2,5 @@ FROM rust:latest
 WORKDIR /backend
 COPY . .
 RUN cargo build -r
-EXPOSE 3000
+EXPOSE 8333
 CMD ["cargo", "run", "-r"]
