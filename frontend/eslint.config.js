@@ -1,21 +1,31 @@
 import js from "@eslint/js";
+import ts from "typescript-eslint";
 import globals from "globals";
-import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import prettier from "eslint-plugin-prettier";
 
-export default tseslint.config(
+export default [
   { ignores: ["dist"] },
+  js.configs.recommended,
+  ...ts.configs.recommended,
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    languageOptions: {
-      globals: globals.browser,
-    },
     plugins: {
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       prettier,
+    },
+    languageOptions: {
+      parserOptions: {
+        sourceType: "module",
+        allowImportExportEverywhere: false,
+        codeFrame: false,
+      },
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+        ...globals.es2020,
+      },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -26,4 +36,4 @@ export default tseslint.config(
       ],
     },
   },
-);
+];

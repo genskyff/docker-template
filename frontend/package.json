@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 9000 --strictPort",
-    "build": "tsc -b && vite build",
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview --port 9001 --strictPort",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -17,19 +17,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
+    "@rsbuild/core": "^1.1.1",
+    "@rsbuild/plugin-react": "^1.0.7",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.12.2",
-    "@typescript-eslint/parser": "^8.12.2",
-    "@vitejs/plugin-react-swc": "^3.7.1",
     "eslint": "^9.14.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react-hooks": "5.1.0-rc-fb9a90fa48-20240614",
     "eslint-plugin-react-refresh": "^0.4.14",
-    "globals": "^15.11.0",
+    "globals": "^15.12.0",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.12.2",
-    "vite": "^5.4.10"
+    "typescript-eslint": "^8.14.0"
   }
 }
