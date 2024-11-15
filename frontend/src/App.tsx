@@ -1,5 +1,5 @@
-import { useState, useEffect, FC } from "react";
-import { createTodoApi, Todo, UpdateTodoInput } from "./api/todos";
+import { useState, useEffect, type FC } from "react";
+import { createTodoApi, type Todo, type UpdateTodoInput } from "./api/todos";
 
 const todoApi = createTodoApi();
 
