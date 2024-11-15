@@ -1,9 +1,9 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { type AxiosInstance } from "axios";
 import {
-  Todo,
-  CreateTodoInput,
-  UpdateTodoInput,
-  PaginationParams,
+  type Todo,
+  type CreateTodoInput,
+  type UpdateTodoInput,
+  type PaginationParams,
 } from "./types";
 
 const createApi = (baseURL: string = "http://localhost:8333"): AxiosInstance =>
