@@ -4,16 +4,22 @@
 //!
 //! - `GET /todos`: return a JSON list of Todos.
 //! - `POST /todos`: create a new Todo.
-//! - `PATCH /todos/:id`: update a specific Todo.
-//! - `DELETE /todos/:id`: delete a specific Todo.
+//! - `PATCH /todos/{id}`: update a specific Todo.
+//! - `DELETE /todos/{id}`: delete a specific Todo.
+//!
+//! Run with
+//!
+//! ```not_rust
+//! cargo run -p example-todos
+//! ```
 
 use axum::{
+    Json, Router,
     error_handling::HandleErrorLayer,
     extract::{Path, Query, State},
     http::StatusCode,
     response::IntoResponse,
     routing::{get, patch},
-    Json, Router,
 };
 use serde::{Deserialize, Serialize};
 use std::{
@@ -22,8 +28,7 @@ use std::{
     time::Duration,
 };
 use tower::{BoxError, ServiceBuilder};
-use tower_http::cors::{Any, CorsLayer};
-use tower_http::trace::TraceLayer;
+use tower_http::{cors::Any, cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
 
@@ -31,8 +36,9 @@ use uuid::Uuid;
 async fn main() {
     tracing_subscriber::registry()
         .with(
-            tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "todos=debug,tower_http=debug".into()),
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME")).into()
+            }),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
@@ -42,7 +48,7 @@ async fn main() {
     // Compose the routes
     let app = Router::new()
         .route("/todos", get(todos_index).post(todos_create))
-        .route("/todos/:id", patch(todos_update).delete(todos_delete))
+        .route("/todos/{id}", patch(todos_update).delete(todos_delete))
         // Add middleware to all routes
         .layer(
             ServiceBuilder::new()
@@ -82,13 +88,8 @@ pub struct Pagination {
     pub limit: Option<usize>,
 }
 
-async fn todos_index(
-    pagination: Option<Query<Pagination>>,
-    State(db): State<Db>,
-) -> impl IntoResponse {
+async fn todos_index(pagination: Query<Pagination>, State(db): State<Db>) -> impl IntoResponse {
     let todos = db.read().unwrap();
-
-    let Query(pagination) = pagination.unwrap_or_default();
 
     let todos = todos
         .values()
