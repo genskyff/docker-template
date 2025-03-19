@@ -7,7 +7,8 @@
     "dev": "rsbuild dev",
     "build": "rsbuild build",
     "preview": "rsbuild preview",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0 && tsc --noEmit",
+    "lint:fix": "eslint . --report-unused-disable-directives --max-warnings 0 --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -19,7 +20,7 @@
     "@eslint/js": "^9.22.0",
     "@rsbuild/core": "^1.2.19",
     "@rsbuild/plugin-react": "^1.1.1",
-    "@types/react": "^19.0.10",
+    "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.22.0",
     "eslint-plugin-prettier": "^5.2.3",
@@ -30,5 +31,5 @@
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
   },
-  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
+  "packageManager": "pnpm@10.6.4+sha512.da3d715bfd22a9a105e6e8088cfc7826699332ded60c423b14ec613a185f1602206702ff0fe4c438cb15c979081ce4cb02568e364b15174503a63c7a8e2a5f6c"
 }

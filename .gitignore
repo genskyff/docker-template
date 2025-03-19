@@ -1,8 +1,14 @@
+# Local
+.DS_Store
+*.local
+*.log*
+
+# Dist
 /backend/target
 node_modules
 dist
 
-# Editor directories and files
-.vscode
+# IDE
+.vscode/*
+!.vscode/extensions.json
 .idea
-.DS_Store
