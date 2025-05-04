@@ -1,7 +1,10 @@
-node_modules
-dist
+# Local
+.DS_Store
 
-# Editor directories and files
+# Dist
+node_modules
+/dist
+
+# IDE
 .vscode
 .idea
-.DS_Store

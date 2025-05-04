@@ -1,6 +1,9 @@
+# Local
+.DS_Store
+
+# Dist
 /target
 
-# Editor directories and files
+# IDE
 .vscode
 .idea
-.DS_Store
