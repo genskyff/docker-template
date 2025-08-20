@@ -1,39 +1,31 @@
 import js from "@eslint/js";
 import ts from "typescript-eslint";
 import globals from "globals";
+import { defineConfig, globalIgnores } from "eslint/config";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import prettier from "eslint-plugin-prettier";
 
-export default [
-  { ignores: ["dist"] },
-  js.configs.recommended,
-  ...ts.configs.recommended,
+export default defineConfig([
+  globalIgnores(["dist"]),
   {
     plugins: {
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
       prettier,
     },
+    extends: [
+      js.configs.recommended,
+      ts.configs.recommended,
+      reactHooks.configs["recommended-latest"],
+      reactRefresh.configs.vite,
+    ],
     languageOptions: {
-      parserOptions: {
-        sourceType: "module",
-        allowImportExportEverywhere: false,
-        codeFrame: false,
-      },
       globals: {
         ...globals.node,
         ...globals.browser,
-        ...globals.es2025,
       },
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
       ...prettier.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
     },
   },
-];
+]);
