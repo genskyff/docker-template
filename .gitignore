@@ -4,11 +4,10 @@
 *.log*
 
 # Dist
-/backend/target
 node_modules
-dist
+/backend/target
+/frontend/dist
 
 # IDE
-.vscode/*
-!.vscode/extensions.json
+.vscode
 .idea
