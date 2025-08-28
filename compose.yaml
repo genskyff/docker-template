@@ -2,9 +2,9 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8333:8333"
+      - "3001:3001"
     networks:
-      - app-network
+      - app-net
 
   frontend:
     build: ./frontend
@@ -13,8 +13,8 @@ services:
     depends_on:
       - backend
     networks:
-      - app-network
+      - app-net
 
 networks:
-  app-network:
+  app-net:
     driver: bridge

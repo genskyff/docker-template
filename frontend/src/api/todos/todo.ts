@@ -6,7 +6,7 @@ import {
   type PaginationParams,
 } from "./types";
 
-const createApi = (baseURL: string = "http://localhost:8333"): AxiosInstance =>
+const createApi = (baseURL: string = "http://localhost:3001"): AxiosInstance =>
   axios.create({
     baseURL,
     timeout: 10000,
