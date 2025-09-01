@@ -1,9 +1,0 @@
-# Local
-.DS_Store
-
-# Dist
-/target
-
-# IDE
-.vscode
-.idea
