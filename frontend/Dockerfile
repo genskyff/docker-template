@@ -1,6 +1,10 @@
 FROM node:lts-trixie
-WORKDIR /frontend
-COPY . .
-RUN corepack enable
-RUN pnpm install --frozen-lockfile
-RUN pnpm build
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+EXPOSE 3000
