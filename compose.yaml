@@ -3,18 +3,38 @@ services:
     build: ./backend
     ports:
       - "3001:3001"
+    volumes:
+      - ./backend:/app:cached
+      - rust-target:/app/target
+      - cargo-registry:/usr/local/cargo/registry
+    environment:
+      - RUST_BACKTRACE=1
+      - RUST_LOG=debug
     networks:
-      - app-net
+      - app-network
+    command: bash -c "cargo build && cargo watch -x run"
 
   frontend:
     build: ./frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app:cached
+      - node-modules:/app/node_modules
+      - pnpm-store:/app/.pnpm-store
+    environment:
+      - NODE_ENV=development
     depends_on:
       - backend
     networks:
-      - app-net
+      - app-network
+    command: bash -c "pnpm install && pnpm dev"
 
 networks:
-  app-net:
-    driver: bridge
+  app-network:
+
+volumes:
+  rust-target:
+  cargo-registry:
+  node-modules:
+  pnpm-store:
