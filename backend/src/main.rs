@@ -47,8 +47,8 @@ async fn main() {
 
     // Compose the routes
     let app = Router::new()
-        .route("/todos", get(todos_index).post(todos_create))
-        .route("/todos/{id}", patch(todos_update).delete(todos_delete))
+        .route("/api/todos", get(todos_index).post(todos_create))
+        .route("/api/todos/{id}", patch(todos_update).delete(todos_delete))
         // Add middleware to all routes
         .layer(
             ServiceBuilder::new()
