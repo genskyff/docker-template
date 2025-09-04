@@ -74,7 +74,7 @@ async fn main() {
         )
         .with_state(db);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3001")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3001")
         .await
         .unwrap();
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
