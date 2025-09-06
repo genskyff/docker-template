@@ -1,5 +1,6 @@
 services:
-  backend:
+  app-server:
+    container_name: "${COMPOSE_PROJECT_NAME}_app-server"
     build: ./backend
     ports:
       - "3001:3001"
@@ -14,7 +15,8 @@ services:
       - app-network
     command: bash -c "cargo build && cargo watch -x run"
 
-  frontend:
+  app-front:
+    container_name: "${COMPOSE_PROJECT_NAME}_app-front"
     build: ./frontend
     ports:
       - "3000:3000"
@@ -24,8 +26,9 @@ services:
       - pnpm-store:/app/.pnpm-store
     environment:
       - NODE_ENV=development
+      - DOCKER_ENV=true
     depends_on:
-      - backend
+      - app-server
     networks:
       - app-network
     command: bash -c "pnpm install && pnpm dev"
