@@ -1,7 +1,7 @@
 services:
   app-server:
-    container_name: "${COMPOSE_PROJECT_NAME}_app-server"
     build: ./server
+    container_name: "${COMPOSE_PROJECT_NAME}_app-server"
     ports:
       - "3001:3001"
     volumes:
@@ -16,8 +16,8 @@ services:
     command: bash -c "cargo build && cargo watch -x run"
 
   app-web:
-    container_name: "${COMPOSE_PROJECT_NAME}_app-web"
     build: ./web
+    container_name: "${COMPOSE_PROJECT_NAME}_app-web"
     ports:
       - "3000:3000"
     volumes:
@@ -27,11 +27,11 @@ services:
     environment:
       - NODE_ENV=development
       - DOCKER_ENV=true
-    depends_on:
-      - app-server
     networks:
       - app-network
     command: bash -c "pnpm install && pnpm dev"
+    depends_on:
+      - app-server
 
 networks:
   app-network:
