@@ -1,12 +1,12 @@
 services:
   app-server:
     container_name: "${COMPOSE_PROJECT_NAME}_app-server"
-    build: ./backend
+    build: ./server
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/app:cached
-      - rust-target:/app/target
+      - ./server:/app-server:cached
+      - rust-target:/app-server/target
       - cargo-registry:/usr/local/cargo/registry
     environment:
       - RUST_BACKTRACE=1
@@ -15,15 +15,15 @@ services:
       - app-network
     command: bash -c "cargo build && cargo watch -x run"
 
-  app-front:
-    container_name: "${COMPOSE_PROJECT_NAME}_app-front"
-    build: ./frontend
+  app-web:
+    container_name: "${COMPOSE_PROJECT_NAME}_app-web"
+    build: ./web
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app:cached
-      - node-modules:/app/node_modules
-      - pnpm-store:/app/.pnpm-store
+      - ./web:/app-web:cached
+      - node-modules:/app-web/node_modules
+      - pnpm-store:/app-web/.pnpm-store
     environment:
       - NODE_ENV=development
       - DOCKER_ENV=true

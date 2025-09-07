@@ -6,8 +6,8 @@
 
 # Dist
 node_modules
-/backend/target
-/frontend/dist
+/server/target
+/web/dist
 
 # IDE
 .vscode
