@@ -14,6 +14,8 @@ services:
     networks:
       - app-network
     command: bash -c "cargo build && cargo watch -x run"
+    stdin_open: true
+    tty: true
 
   app-web:
     build: ./web
@@ -30,6 +32,8 @@ services:
     networks:
       - app-network
     command: bash -c "pnpm install && pnpm dev"
+    stdin_open: true
+    tty: true
     depends_on:
       - app-server
 
