@@ -5,7 +5,7 @@ Docker-based development environment template for full-stack applications.
 ## Quick start
 
 ```shell
-docker-compose up
+docker compose up -d
 ```
 
 - Server: http://localhost:3001
@@ -21,4 +21,3 @@ docker-compose up
 
 - `server/` - Rust server with Axum
 - `web/` - React web with TypeScript
-- `compose.yaml` - Docker development environment
