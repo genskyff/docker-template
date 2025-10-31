@@ -15,7 +15,7 @@ export default defineConfig([
     extends: [
       js.configs.recommended,
       ts.configs.recommended,
-      reactHooks.configs["recommended-latest"],
+      reactHooks.configs.flat["recommended-latest"],
       reactRefresh.configs.vite,
     ],
     languageOptions: {
