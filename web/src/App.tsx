@@ -8,17 +8,25 @@ const App: FC = () => {
   const [newTodoText, setNewTodoText] = useState("");
 
   useEffect(() => {
-    fetchTodos();
-  }, []);
+    let cancelled = false;
 
-  const fetchTodos = async () => {
-    try {
-      const fetchedTodos = await todoApi.getTodos();
-      setTodos(fetchedTodos);
-    } catch (error) {
-      console.error("Failed to fetch todos:", error);
-    }
-  };
+    const fetchData = async () => {
+      try {
+        const fetchedTodos = await todoApi.getTodos();
+        if (!cancelled) {
+          setTodos(fetchedTodos);
+        }
+      } catch (error) {
+        console.error("Failed to fetch todos:", error);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleCreateTodo = async (e: React.FormEvent) => {
     e.preventDefault();
