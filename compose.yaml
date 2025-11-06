@@ -1,47 +1,45 @@
 services:
   app-server:
     build: ./server
-    container_name: "${COMPOSE_PROJECT_NAME}_app-server"
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./server:/app-server:cached
-      - rust-target:/app-server/target
-      - cargo-registry:/usr/local/cargo/registry
+    command: sh -c 'cargo build && cargo watch -x run'
     environment:
       - RUST_BACKTRACE=1
       - RUST_LOG=debug
     networks:
       - app-network
-    command: bash -c "cargo build && cargo watch -x run"
+    ports:
+      - 3001:3001
     stdin_open: true
     tty: true
+    volumes:
+      - ./server:/app-server:cached
+      - cargo-registry:/usr/local/cargo/registry
+      - rust-target:/app-server/target
 
   app-web:
     build: ./web
-    container_name: "${COMPOSE_PROJECT_NAME}_app-web"
+    command: sh -c 'pnpm install && pnpm dev'
+    depends_on:
+      - app-server
+    environment:
+      - DOCKER_ENV=true
+      - NODE_ENV=development
+    networks:
+      - app-network
     ports:
-      - "3000:3000"
+      - 3000:3000
+    stdin_open: true
+    tty: true
     volumes:
       - ./web:/app-web:cached
       - node-modules:/app-web/node_modules
       - pnpm-store:/app-web/.pnpm-store
-    environment:
-      - NODE_ENV=development
-      - DOCKER_ENV=true
-    networks:
-      - app-network
-    command: bash -c "pnpm install && pnpm dev"
-    stdin_open: true
-    tty: true
-    depends_on:
-      - app-server
 
 networks:
   app-network:
 
 volumes:
-  rust-target:
   cargo-registry:
+  rust-target:
   node-modules:
   pnpm-store:
