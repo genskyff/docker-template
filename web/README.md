@@ -12,18 +12,26 @@ pnpm install
 
 Start the dev server:
 
-```bash
+```shell
 pnpm dev
 ```
 
 Build the app for production:
 
-```bash
+```shell
 pnpm build
 ```
 
 Preview the production build locally:
 
-```bash
+```shell
 pnpm preview
+```
+
+## Docker Compose
+
+To build and run the project using Docker Compose, use the following command:
+
+```shell
+docker compose up -d
 ```
