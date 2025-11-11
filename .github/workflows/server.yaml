@@ -3,8 +3,14 @@ name: Server
 on:
   push:
     branches: [ "**" ]
+    paths:
+      - server/**
+      - .github/workflows/server.yaml
   pull_request:
     branches: [ "**" ]
+    paths:
+      - server/**
+      - .github/workflows/server.yaml
 
 env:
   CARGO_TERM_COLOR: always
