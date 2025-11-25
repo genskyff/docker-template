@@ -1,63 +1,43 @@
-import { useState, useEffect, type FC } from "react";
-import { createTodoApi, type Todo, type UpdateTodoInput } from "./api/todos";
-
-const todoApi = createTodoApi();
+import { useState, type FC } from "react";
+import {
+  useTodos,
+  useCreateTodo,
+  useUpdateTodo,
+  useDeleteTodo,
+  type Todo,
+} from "./api/todos";
 
 const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodoText, setNewTodoText] = useState("");
+  const { data: todos = [], isLoading, error } = useTodos();
+  const createTodoMutation = useCreateTodo();
+  const updateTodoMutation = useUpdateTodo();
+  const deleteTodoMutation = useDeleteTodo();
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const fetchData = async () => {
-      try {
-        const fetchedTodos = await todoApi.getTodos();
-        if (!cancelled) {
-          setTodos(fetchedTodos);
-        }
-      } catch (error) {
-        console.error("Failed to fetch todos:", error);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const handleCreateTodo = async (e: React.FormEvent) => {
+  const handleCreateTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTodoText.trim()) return;
 
-    try {
-      const newTodo = await todoApi.createTodo({ text: newTodoText });
-      setTodos([...todos, newTodo]);
-      setNewTodoText("");
-    } catch (error) {
-      console.error("Failed to create todo:", error);
-    }
+    createTodoMutation.mutate(
+      { text: newTodoText },
+      {
+        onSuccess: () => {
+          setNewTodoText("");
+        },
+      },
+    );
   };
 
-  const handleUpdateTodo = async (id: string, input: UpdateTodoInput) => {
-    try {
-      const updatedTodo = await todoApi.updateTodo(id, input);
-      setTodos(todos.map((todo) => (todo.id === id ? updatedTodo : todo)));
-    } catch (error) {
-      console.error("Failed to update todo:", error);
-    }
+  const handleUpdateTodo = (id: string, completed: boolean) => {
+    updateTodoMutation.mutate({ id, input: { completed } });
   };
 
-  const handleDeleteTodo = async (id: string) => {
-    try {
-      await todoApi.deleteTodo(id);
-      setTodos(todos.filter((todo) => todo.id !== id));
-    } catch (error) {
-      console.error("Failed to delete todo:", error);
-    }
+  const handleDeleteTodo = (id: string) => {
+    deleteTodoMutation.mutate(id);
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading todos</div>;
 
   return (
     <div>
@@ -68,18 +48,19 @@ const App: FC = () => {
           value={newTodoText}
           onChange={(e) => setNewTodoText(e.target.value)}
           placeholder="Enter new todo"
+          disabled={createTodoMutation.isPending}
         />
-        <button type="submit">Add Todo</button>
+        <button type="submit" disabled={createTodoMutation.isPending}>
+          {createTodoMutation.isPending ? "Adding..." : "Add Todo"}
+        </button>
       </form>
       <ul>
-        {todos.map((todo) => (
+        {todos.map((todo: Todo) => (
           <li key={todo.id}>
             <input
               type="checkbox"
               checked={todo.completed}
-              onChange={() =>
-                handleUpdateTodo(todo.id, { completed: !todo.completed })
-              }
+              onChange={() => handleUpdateTodo(todo.id, !todo.completed)}
             />
             <span
               style={{
