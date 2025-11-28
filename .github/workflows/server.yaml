@@ -24,10 +24,10 @@ jobs:
         working-directory: server
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-      - name: Install Rust
+      - name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
