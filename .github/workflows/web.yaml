@@ -2,12 +2,12 @@ name: Web
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
     paths:
       - web/**
       - .github/workflows/web.yaml
   pull_request:
-    branches: [ "**" ]
+    branches: ["**"]
     paths:
       - web/**
       - .github/workflows/web.yaml

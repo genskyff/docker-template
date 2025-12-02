@@ -2,12 +2,12 @@ name: Server
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
     paths:
       - server/**
       - .github/workflows/server.yaml
   pull_request:
-    branches: [ "**" ]
+    branches: ["**"]
     paths:
       - server/**
       - .github/workflows/server.yaml
