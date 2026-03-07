@@ -1,15 +1,15 @@
-import { defineConfig } from "@rsbuild/core";
-import { pluginReact } from "@rsbuild/plugin-react";
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
 
-const isDocker = process.env.DOCKER_ENV === "true";
+const isDocker = process.env.DOCKER_ENV === 'true';
 
 export default defineConfig({
   plugins: [pluginReact()],
   server: {
     proxy: [
       {
-        context: "/api",
-        target: isDocker ? "http://app-server:3001" : "http://localhost:3001",
+        context: '/api',
+        target: isDocker ? 'http://app-server:3001' : 'http://localhost:3001',
       },
     ],
   },

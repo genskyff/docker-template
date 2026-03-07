@@ -3,16 +3,16 @@ import {
   type CreateTodoInput,
   type UpdateTodoInput,
   type PaginationParams,
-} from "./types";
+} from './types';
 
-const createApi = (baseURL: string = "/api") => {
+const createApi = (baseURL: string = '/api') => {
   const request = async <T>(
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> => {
     const url = `${baseURL}${endpoint}`;
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...options.headers,
     };
 
@@ -39,34 +39,34 @@ const createApi = (baseURL: string = "/api") => {
     getTodos: async (params?: PaginationParams): Promise<Todo[]> => {
       const searchParams = new URLSearchParams();
       if (params?.offset !== undefined) {
-        searchParams.append("offset", params.offset.toString());
+        searchParams.append('offset', params.offset.toString());
       }
       if (params?.limit !== undefined) {
-        searchParams.append("limit", params.limit.toString());
+        searchParams.append('limit', params.limit.toString());
       }
       const queryString = searchParams.toString()
-        ? "?" + searchParams.toString()
-        : "";
+        ? '?' + searchParams.toString()
+        : '';
       return request<Todo[]>(`/todos${queryString}`);
     },
 
     createTodo: async (input: CreateTodoInput): Promise<Todo> => {
-      return request<Todo>("/todos", {
-        method: "POST",
+      return request<Todo>('/todos', {
+        method: 'POST',
         body: JSON.stringify(input),
       });
     },
 
     updateTodo: async (id: string, input: UpdateTodoInput): Promise<Todo> => {
       return request<Todo>(`/todos/${id}`, {
-        method: "PATCH",
+        method: 'PATCH',
         body: JSON.stringify(input),
       });
     },
 
     deleteTodo: async (id: string): Promise<void> => {
       await request<void>(`/todos/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
     },
   };

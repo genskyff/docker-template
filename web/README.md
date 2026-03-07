@@ -27,11 +27,3 @@ Preview the production build locally:
 ```shell
 pnpm preview
 ```
-
-## Docker Compose
-
-To build and run the project using Docker Compose, use the following command:
-
-```shell
-docker compose up -d
-```

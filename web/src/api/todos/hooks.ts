@@ -1,16 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTodoApi } from "./todo";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTodoApi } from './todo';
 import type {
   CreateTodoInput,
   UpdateTodoInput,
   PaginationParams,
-} from "./types";
+} from './types';
 
 const todoApi = createTodoApi();
 
 export const useTodos = (params?: PaginationParams) => {
   return useQuery({
-    queryKey: ["todos", params],
+    queryKey: ['todos', params],
     queryFn: () => todoApi.getTodos(params),
   });
 };
@@ -20,7 +20,7 @@ export const useCreateTodo = () => {
   return useMutation({
     mutationFn: (input: CreateTodoInput) => todoApi.createTodo(input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
     },
   });
 };
@@ -31,7 +31,7 @@ export const useUpdateTodo = () => {
     mutationFn: ({ id, input }: { id: string; input: UpdateTodoInput }) =>
       todoApi.updateTodo(id, input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
     },
   });
 };
@@ -41,7 +41,7 @@ export const useDeleteTodo = () => {
   return useMutation({
     mutationFn: (id: string) => todoApi.deleteTodo(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
     },
   });
 };

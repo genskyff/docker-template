@@ -1,14 +1,14 @@
-import { useState, type FC } from "react";
+import { useState, type FC } from 'react';
 import {
   useTodos,
   useCreateTodo,
   useUpdateTodo,
   useDeleteTodo,
   type Todo,
-} from "./api/todos";
+} from './api/todos';
 
 const App: FC = () => {
-  const [newTodoText, setNewTodoText] = useState("");
+  const [newTodoText, setNewTodoText] = useState('');
   const { data: todos = [], isLoading, error } = useTodos();
   const createTodoMutation = useCreateTodo();
   const updateTodoMutation = useUpdateTodo();
@@ -22,7 +22,7 @@ const App: FC = () => {
       { text: newTodoText },
       {
         onSuccess: () => {
-          setNewTodoText("");
+          setNewTodoText('');
         },
       },
     );
@@ -51,7 +51,7 @@ const App: FC = () => {
           disabled={createTodoMutation.isPending}
         />
         <button type="submit" disabled={createTodoMutation.isPending}>
-          {createTodoMutation.isPending ? "Adding..." : "Add Todo"}
+          {createTodoMutation.isPending ? 'Adding...' : 'Add Todo'}
         </button>
       </form>
       <ul>
@@ -64,7 +64,7 @@ const App: FC = () => {
             />
             <span
               style={{
-                textDecoration: todo.completed ? "line-through" : "none",
+                textDecoration: todo.completed ? 'line-through' : 'none',
               }}
             >
               {todo.text}
