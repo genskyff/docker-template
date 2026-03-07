@@ -1,10 +1,10 @@
-import { useState, type FC } from 'react';
+import { type FC, useState } from 'react';
 import {
-  useTodos,
-  useCreateTodo,
-  useUpdateTodo,
-  useDeleteTodo,
   type Todo,
+  useCreateTodo,
+  useDeleteTodo,
+  useTodos,
+  useUpdateTodo,
 } from './api/todos';
 
 const App: FC = () => {

@@ -1,8 +1,8 @@
-import {
-  type Todo,
-  type CreateTodoInput,
-  type UpdateTodoInput,
-  type PaginationParams,
+import type {
+  CreateTodoInput,
+  PaginationParams,
+  Todo,
+  UpdateTodoInput,
 } from './types';
 
 const createApi = (baseURL: string = '/api') => {
@@ -45,7 +45,7 @@ const createApi = (baseURL: string = '/api') => {
         searchParams.append('limit', params.limit.toString());
       }
       const queryString = searchParams.toString()
-        ? '?' + searchParams.toString()
+        ? `?${searchParams.toString()}`
         : '';
       return request<Todo[]>(`/todos${queryString}`);
     },

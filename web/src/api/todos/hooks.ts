@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createTodoApi } from './todo';
 import type {
   CreateTodoInput,
-  UpdateTodoInput,
   PaginationParams,
+  UpdateTodoInput,
 } from './types';
 
 const todoApi = createTodoApi();

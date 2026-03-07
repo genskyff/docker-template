@@ -4,11 +4,6 @@
 *.log*
 .pnpm-store
 
-# Dist
-node_modules
-/server/target
-/web/dist
-
 # IDE
 .vscode
 .idea
