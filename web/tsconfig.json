@@ -16,29 +16,26 @@
     "allowImportingTsExtensions": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "noUncheckedSideEffectImports": true,
     "paths": {
       "@/*": ["./src/*"]
     },
     "resolveJsonModule": true,
+    "types": ["node", "react", "react-dom"],
 
     // Emit
     "noEmit": true,
     "removeComments": true,
 
     // Interop Constraints
-    "allowSyntheticDefaultImports": true,
     "erasableSyntaxOnly": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": ["dom", "esnext"],
     "moduleDetection": "force",
-    "target": "esnext",
     "useDefineForClassFields": true,
 
     // Completeness
