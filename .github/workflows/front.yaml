@@ -1,0 +1,39 @@
+name: Front
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - front/**
+      - .github/workflows/front.yaml
+  pull_request:
+    branches: [ "**" ]
+    paths:
+      - front/**
+      - .github/workflows/front.yaml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: front
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: jdx/mise-action@v4
+        with:
+          working_directory: front
+
+      - name: Install packages
+        run: bun install --frozen-lockfile
+
+      - name: Run check
+        run: bun run check
+
+      - name: Run build
+        run: bun run build

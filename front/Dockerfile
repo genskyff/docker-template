@@ -1,0 +1,8 @@
+FROM oven/bun:alpine
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+WORKDIR /app-front
+
+EXPOSE 3000

@@ -69,7 +69,9 @@ const App: FC = () => {
             >
               {todo.text}
             </span>
-            <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+            <button type="button" onClick={() => handleDeleteTodo(todo.id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>

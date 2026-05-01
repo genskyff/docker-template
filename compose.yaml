@@ -16,9 +16,9 @@ services:
       - cargo-registry:/usr/local/cargo/registry
       - rust-target:/app-server/target
 
-  app-web:
-    build: ./web
-    command: sh -c 'pnpm install && pnpm dev'
+  app-front:
+    build: ./front
+    command: sh -c 'bun install && bun x rsbuild dev --host 0.0.0.0'
     depends_on:
       - app-server
     environment:
@@ -31,9 +31,8 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./web:/app-web:cached
-      - node-modules:/app-web/node_modules
-      - pnpm-store:/app-web/.pnpm-store
+      - ./front:/app-front:cached
+      - node-modules:/app-front/node_modules
 
 networks:
   app-network:
@@ -42,4 +41,3 @@ volumes:
   cargo-registry:
   rust-target:
   node-modules:
-  pnpm-store:

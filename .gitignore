@@ -2,8 +2,6 @@
 .DS_Store
 *.local
 *.log*
-.pnpm-store
 
 # IDE
-.vscode
 .idea

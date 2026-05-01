@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: [
       {
-        context: '/api',
+        pathFilter: '/api',
         target: isDocker ? 'http://app-server:3001' : 'http://localhost:3001',
       },
     ],

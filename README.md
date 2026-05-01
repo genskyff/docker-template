@@ -8,16 +8,17 @@ Docker-based development environment template for full-stack applications.
 docker compose up -d
 ```
 
+- Frontend: http://localhost:3000
 - Server: http://localhost:3001
-- Web: http://localhost:3000
+
 
 ## Features
 
-- **Docker-based development**: No need to install Node.js or Rust locally
-- **Hot reload**: Live code changes for both web and server
+- **Docker-based development**: No need to install Runtime dependencies locally
+- **Hot reload**: Live code changes for both frontend and server
 - **Volume mounts**: Code changes reflect immediately in containers
 
 ## Structure
 
+- `front/` - React frontend with TypeScript
 - `server/` - Rust server with Axum
-- `web/` - React web with TypeScript
