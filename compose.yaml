@@ -1,12 +1,18 @@
 services:
   app-server:
-    build: ./server
-    command: sh -c 'cargo build && cargo watch -x run'
+    build:
+      dockerfile_inline: |
+        FROM rust:trixie
+        RUN rustup component add clippy rust-analyzer rust-src rustfmt && \
+            cargo install --locked cargo-binstall && \
+            cargo binstall --locked -y cargo-edit cargo-expand cargo-outdated cargo-update watchexec-cli
+    working_dir: /app-server
+    command: sh -c 'watchexec -r -c -d 2s --poll 1s -w src -w Cargo.toml -w Cargo.lock -- cargo run'
     environment:
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
       - RUST_BACKTRACE=1
       - RUST_LOG=debug
-    networks:
-      - app-network
     ports:
       - 3001:3001
     stdin_open: true
@@ -17,15 +23,17 @@ services:
       - rust-target:/app-server/target
 
   app-front:
-    build: ./front
-    command: sh -c 'bun install && bun x rsbuild dev --host 0.0.0.0'
+    image: node:lts-alpine
+    working_dir: /app-front
+    command: sh -c 'corepack enable && pnpm install && pnpm exec rsbuild dev --host 0.0.0.0'
     depends_on:
       - app-server
     environment:
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - DOCKER_ENV=true
       - NODE_ENV=development
-    networks:
-      - app-network
     ports:
       - 3000:3000
     stdin_open: true
@@ -33,11 +41,10 @@ services:
     volumes:
       - ./front:/app-front:cached
       - node-modules:/app-front/node_modules
-
-networks:
-  app-network:
+      - pnpm-store:/app-front/.pnpm-store
 
 volumes:
   cargo-registry:
   rust-target:
   node-modules:
+  pnpm-store:
