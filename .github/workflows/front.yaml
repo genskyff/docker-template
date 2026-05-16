@@ -2,12 +2,12 @@ name: Front
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
     paths:
       - front/**
       - .github/workflows/front.yaml
   pull_request:
-    branches: [ "**" ]
+    branches: ["**"]
     paths:
       - front/**
       - .github/workflows/front.yaml
