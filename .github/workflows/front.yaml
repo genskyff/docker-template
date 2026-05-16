@@ -24,16 +24,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Setup Bun
+      - name: Setup Node.js
         uses: jdx/mise-action@v4
         with:
           working_directory: front
 
       - name: Install packages
-        run: bun install --frozen-lockfile
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
 
       - name: Run check
-        run: bun run check
+        run: pnpm check
 
       - name: Run build
-        run: bun run build
+        run: pnpm build
