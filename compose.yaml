@@ -1,16 +1,14 @@
 services:
   app-server:
-    build:
-      dockerfile_inline: |
-        FROM rust:trixie
-        RUN rustup component add clippy rust-analyzer rust-src rustfmt && \
-            cargo install --locked cargo-binstall && \
-            cargo binstall --locked -y cargo-edit cargo-expand cargo-outdated cargo-update watchexec-cli
+    build: ./server
+    image: app-server:latest
+    pull_policy: never
     working_dir: /app-server
-    command: sh -c 'watchexec -r -c -d 2s --poll 1s -w src -w Cargo.toml -w Cargo.lock -- cargo run'
+    command: bash -c 'watchexec -r -c -d 2s --poll 1s -w src -w Cargo.toml -w Cargo.lock -- cargo run'
     environment:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
+      - TZ=Asia/Tokyo
       - RUST_BACKTRACE=1
       - RUST_LOG=debug
     ports:
@@ -23,14 +21,15 @@ services:
       - rust-target:/app-server/target
 
   app-front:
-    image: node:lts-alpine
+    image: node:lts-trixie-slim
     working_dir: /app-front
-    command: sh -c 'corepack enable && pnpm install && pnpm exec rsbuild dev --host 0.0.0.0'
+    command: bash -c 'corepack enable && pnpm install && pnpm exec rsbuild dev --host 0.0.0.0'
     depends_on:
       - app-server
     environment:
       - LANG=C.UTF-8
       - LC_ALL=C.UTF-8
+      - TZ=Asia/Tokyo
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - DOCKER_ENV=true
       - NODE_ENV=development
