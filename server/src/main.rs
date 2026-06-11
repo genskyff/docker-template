@@ -6,27 +6,17 @@
 //! - `POST /todos`: create a new Todo.
 //! - `PATCH /todos/{id}`: update a specific Todo.
 //! - `DELETE /todos/{id}`: delete a specific Todo.
-//!
-//! Run with
-//!
-//! ```not_rust
-//! cargo run -p example-todos
-//! ```
 
 use axum::{
     Json, Router,
     error_handling::HandleErrorLayer,
     extract::{Path, Query, State},
     http::StatusCode,
-    response::IntoResponse,
     routing::{get, patch},
 };
 use serde::{Deserialize, Serialize};
-use std::{
-    collections::HashMap,
-    sync::{Arc, RwLock},
-    time::Duration,
-};
+use sqlx::postgres::{PgPool, PgPoolOptions};
+use std::time::Duration;
 use tower::{BoxError, ServiceBuilder};
 use tower_http::{cors::Any, cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -43,7 +33,19 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let db = Db::default();
+    let database_url =
+        std::env::var("DATABASE_URL").expect("DATABASE_URL environment variable must be set");
+    let db = PgPoolOptions::new()
+        .max_connections(5)
+        .acquire_timeout(Duration::from_secs(3))
+        .connect(&database_url)
+        .await
+        .expect("can't connect to database");
+
+    sqlx::migrate!()
+        .run(&db)
+        .await
+        .expect("can't run database migrations");
 
     // Compose the routes
     let app = Router::new()
@@ -82,21 +84,29 @@ async fn main() {
 // The query parameters for todos index
 #[derive(Debug, Deserialize, Default)]
 pub struct Pagination {
-    pub offset: Option<usize>,
-    pub limit: Option<usize>,
+    pub offset: Option<u32>,
+    pub limit: Option<u32>,
 }
 
-async fn todos_index(pagination: Query<Pagination>, State(db): State<Db>) -> impl IntoResponse {
-    let todos = db.read().unwrap();
+async fn todos_index(
+    pagination: Query<Pagination>,
+    State(db): State<PgPool>,
+) -> Result<Json<Vec<Todo>>, AppError> {
+    let todos = sqlx::query_as::<_, Todo>(
+        r#"
+        SELECT id, text, completed
+        FROM todos
+        ORDER BY created_at, id
+        LIMIT $1 OFFSET $2
+        "#,
+    )
+    .bind(i64::from(pagination.limit.unwrap_or(u32::MAX)))
+    .bind(i64::from(pagination.offset.unwrap_or(0)))
+    .fetch_all(&db)
+    .await
+    .map_err(internal_error)?;
 
-    let todos = todos
-        .values()
-        .skip(pagination.offset.unwrap_or(0))
-        .take(pagination.limit.unwrap_or(usize::MAX))
-        .cloned()
-        .collect::<Vec<_>>();
-
-    Json(todos)
+    Ok(Json(todos))
 }
 
 #[derive(Debug, Deserialize)]
@@ -104,16 +114,24 @@ struct CreateTodo {
     text: String,
 }
 
-async fn todos_create(State(db): State<Db>, Json(input): Json<CreateTodo>) -> impl IntoResponse {
-    let todo = Todo {
-        id: Uuid::new_v4(),
-        text: input.text,
-        completed: false,
-    };
+async fn todos_create(
+    State(db): State<PgPool>,
+    Json(input): Json<CreateTodo>,
+) -> Result<(StatusCode, Json<Todo>), AppError> {
+    let todo = sqlx::query_as::<_, Todo>(
+        r#"
+        INSERT INTO todos (id, text)
+        VALUES ($1, $2)
+        RETURNING id, text, completed
+        "#,
+    )
+    .bind(Uuid::new_v4())
+    .bind(input.text)
+    .fetch_one(&db)
+    .await
+    .map_err(internal_error)?;
 
-    db.write().unwrap().insert(todo.id, todo.clone());
-
-    (StatusCode::CREATED, Json(todo))
+    Ok((StatusCode::CREATED, Json(todo)))
 }
 
 #[derive(Debug, Deserialize)]
@@ -124,40 +142,62 @@ struct UpdateTodo {
 
 async fn todos_update(
     Path(id): Path<Uuid>,
-    State(db): State<Db>,
+    State(db): State<PgPool>,
     Json(input): Json<UpdateTodo>,
-) -> Result<impl IntoResponse, StatusCode> {
-    let mut todo = db
-        .read()
-        .unwrap()
-        .get(&id)
-        .cloned()
-        .ok_or(StatusCode::NOT_FOUND)?;
-
-    if let Some(text) = input.text {
-        todo.text = text;
-    }
-
-    if let Some(completed) = input.completed {
-        todo.completed = completed;
-    }
-
-    db.write().unwrap().insert(todo.id, todo.clone());
+) -> Result<Json<Todo>, AppError> {
+    let todo = sqlx::query_as::<_, Todo>(
+        r#"
+        UPDATE todos
+        SET
+            text = COALESCE($2, text),
+            completed = COALESCE($3, completed)
+        WHERE id = $1
+        RETURNING id, text, completed
+        "#,
+    )
+    .bind(id)
+    .bind(input.text)
+    .bind(input.completed)
+    .fetch_optional(&db)
+    .await
+    .map_err(internal_error)?
+    .ok_or_else(not_found)?;
 
     Ok(Json(todo))
 }
 
-async fn todos_delete(Path(id): Path<Uuid>, State(db): State<Db>) -> impl IntoResponse {
-    if db.write().unwrap().remove(&id).is_some() {
-        StatusCode::NO_CONTENT
+async fn todos_delete(
+    Path(id): Path<Uuid>,
+    State(db): State<PgPool>,
+) -> Result<StatusCode, AppError> {
+    let result = sqlx::query("DELETE FROM todos WHERE id = $1")
+        .bind(id)
+        .execute(&db)
+        .await
+        .map_err(internal_error)?;
+
+    if result.rows_affected() == 1 {
+        Ok(StatusCode::NO_CONTENT)
     } else {
-        StatusCode::NOT_FOUND
+        Err(not_found())
     }
 }
 
-type Db = Arc<RwLock<HashMap<Uuid, Todo>>>;
+type AppError = (StatusCode, String);
 
-#[derive(Debug, Serialize, Clone)]
+fn internal_error(error: sqlx::Error) -> AppError {
+    tracing::error!(%error, "database operation failed");
+    (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        "Internal server error".to_owned(),
+    )
+}
+
+fn not_found() -> AppError {
+    (StatusCode::NOT_FOUND, "Todo not found".to_owned())
+}
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
 struct Todo {
     id: Uuid,
     text: String,
