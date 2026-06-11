@@ -4,13 +4,15 @@ services:
     image: app-server:latest
     pull_policy: never
     working_dir: /app-server
-    command: bash -c 'watchexec -r -c -d 2s --poll 1s -w src -w Cargo.toml -w Cargo.lock -- cargo run'
+    command: watchexec -r -c -d 2s --poll 1s -w migrations -w src -w Cargo.toml -w Cargo.lock -- cargo run
+    depends_on:
+      database:
+        condition: service_healthy
     environment:
-      - LANG=C.UTF-8
-      - LC_ALL=C.UTF-8
-      - TZ=Asia/Tokyo
-      - RUST_BACKTRACE=1
-      - RUST_LOG=debug
+      - TZ=${TZ}
+      - RUST_BACKTRACE=${RUST_BACKTRACE}
+      - RUST_LOG=${RUST_LOG}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
     ports:
       - 3001:3001
     stdin_open: true
@@ -23,16 +25,14 @@ services:
   app-front:
     image: node:lts-trixie-slim
     working_dir: /app-front
-    command: bash -c 'corepack enable && pnpm install && pnpm exec rsbuild dev --host 0.0.0.0'
+    command: sh -c 'corepack enable && pnpm install && pnpm exec rsbuild dev --host 0.0.0.0'
     depends_on:
       - app-server
     environment:
-      - LANG=C.UTF-8
-      - LC_ALL=C.UTF-8
-      - TZ=Asia/Tokyo
-      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-      - DOCKER_ENV=true
-      - NODE_ENV=development
+      - TZ=${TZ}
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=${COREPACK_ENABLE_DOWNLOAD_PROMPT}
+      - DOCKER_ENV=${DOCKER_ENV}
+      - NODE_ENV=${NODE_ENV}
     ports:
       - 3000:3000
     stdin_open: true
