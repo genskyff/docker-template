@@ -20,5 +20,5 @@ docker compose up -d
 
 ## Structure
 
-- `front/` - React frontend with TypeScript
-- `server/` - Rust server with Axum
+- `front/` - React frontend with TypeScript + Rsbuild
+- `server/` - Rust server with Axum + SQLx (PostgreSQL)
