@@ -19,6 +19,7 @@ use sqlx::postgres::{PgPool, PgPoolOptions};
 use std::time::Duration;
 use tower::{BoxError, ServiceBuilder};
 use tower_http::{cors::Any, cors::CorsLayer, trace::TraceLayer};
+use tracing_subscriber::fmt::time::OffsetTime;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
 
@@ -30,7 +31,9 @@ async fn main() {
                 format!("{}=debug,tower_http=debug", env!("CARGO_CRATE_NAME")).into()
             }),
         )
-        .with(tracing_subscriber::fmt::layer())
+        .with(tracing_subscriber::fmt::layer().with_timer(
+            OffsetTime::local_rfc_3339().expect("could not determine local time offset"),
+        ))
         .init();
 
     let database_url =
