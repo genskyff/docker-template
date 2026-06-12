@@ -30,7 +30,7 @@ services:
       - RUST_LOG=${RUST_LOG}
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
     ports:
-      - 3001:3001
+      - 3100:3100
     stdin_open: true
     tty: true
     volumes:
