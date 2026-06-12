@@ -5,6 +5,7 @@ Docker-based development environment template for full-stack applications.
 ## Quick start
 
 ```shell
+cp .env.example .env
 docker compose up -d
 ```
 
