@@ -10,9 +10,8 @@ services:
       - 5432:5432
     healthcheck:
       test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
-      interval: 2s
-      timeout: 5s
-      retries: 3
+      interval: 3s
+      timeout: 3s
     volumes:
       - postgres-data:/var/lib/postgresql
 
