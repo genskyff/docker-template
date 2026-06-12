@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Modules
+    "types": ["react", "react-dom"],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // Language and Environment
+    "jsx": "react-jsx",
+    "lib": ["dom", "esnext"],
+
+    // Project
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+  },
+  "include": ["src"]
+}
