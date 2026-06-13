@@ -6,6 +6,7 @@ publish = false
 
 [dependencies]
 axum = "0.8.9"
+mimalloc = "0.1.52"
 serde = { version = "1.0.228", features = ["derive"] }
 sqlx = { version = "0.9.0", features = ["runtime-tokio", "postgres", "uuid"] }
 tokio = { version = "1.52.3", features = ["full"] }

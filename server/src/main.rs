@@ -14,6 +14,7 @@ use axum::{
     http::StatusCode,
     routing::{get, patch},
 };
+use mimalloc::MiMalloc;
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::{PgPool, PgPoolOptions};
 use std::time::Duration;
@@ -22,6 +23,9 @@ use tower_http::{cors::Any, cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::fmt::time::OffsetTime;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
+
+#[global_allocator]
+static GLOBAL: MiMalloc = MiMalloc;
 
 #[tokio::main]
 async fn main() {
