@@ -1,5 +1,5 @@
 services:
-  database:
+  app-db:
     image: postgres:18-alpine
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -22,13 +22,13 @@ services:
     working_dir: /app-server
     command: watchexec -r -c -d 2s --poll 1s -w migrations -w src -w Cargo.toml -w Cargo.lock -- cargo run
     depends_on:
-      database:
+      app-db:
         condition: service_healthy
     environment:
       - TZ=${TZ}
       - RUST_BACKTRACE=${RUST_BACKTRACE}
       - RUST_LOG=${RUST_LOG}
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@app-db:5432/${POSTGRES_DB}
     ports:
       - 3100:3100
     stdin_open: true
