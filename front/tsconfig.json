@@ -16,7 +16,11 @@
     "allowImportingTsExtensions": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "resolveJsonModule": true,
+    "types": ["node", "react", "react-dom"],
 
     // Emit
     "noEmit": true,
@@ -29,15 +33,13 @@
     "verbatimModuleSyntax": true,
 
     // Language and Environment
+    "jsx": "react-jsx",
+    "lib": ["dom", "esnext"],
     "moduleDetection": "force",
     "useDefineForClassFields": true,
 
     // Completeness
     "skipLibCheck": true
   },
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "include": ["src", "*.ts"],
 }
