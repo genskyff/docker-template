@@ -1,10 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createTodoApi } from './todo';
-import type {
-  CreateTodoInput,
-  PaginationParams,
-  UpdateTodoInput,
-} from './types';
+import type { CreateTodoInput, PaginationParams, UpdateTodoInput } from './types';
 
 const todoApi = createTodoApi();
 
@@ -28,8 +24,7 @@ export const useCreateTodo = () => {
 export const useUpdateTodo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: UpdateTodoInput }) =>
-      todoApi.updateTodo(id, input),
+    mutationFn: ({ id, input }: { id: string; input: UpdateTodoInput }) => todoApi.updateTodo(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
     },

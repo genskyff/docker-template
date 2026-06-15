@@ -1,15 +1,7 @@
-import type {
-  CreateTodoInput,
-  PaginationParams,
-  Todo,
-  UpdateTodoInput,
-} from './types';
+import type { CreateTodoInput, PaginationParams, Todo, UpdateTodoInput } from './types';
 
 const createApi = (baseURL: string = '/api') => {
-  const request = async <T>(
-    endpoint: string,
-    options: RequestInit = {},
-  ): Promise<T> => {
+  const request = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
     const url = `${baseURL}${endpoint}`;
     const headers = {
       'Content-Type': 'application/json',
@@ -44,9 +36,7 @@ const createApi = (baseURL: string = '/api') => {
       if (params?.limit !== undefined) {
         searchParams.append('limit', params.limit.toString());
       }
-      const queryString = searchParams.toString()
-        ? `?${searchParams.toString()}`
-        : '';
+      const queryString = searchParams.toString() ? `?${searchParams.toString()}` : '';
       return request<Todo[]>(`/todos${queryString}`);
     },
 

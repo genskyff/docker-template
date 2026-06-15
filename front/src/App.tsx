@@ -1,11 +1,5 @@
 import { type FC, useState } from 'react';
-import {
-  type Todo,
-  useCreateTodo,
-  useDeleteTodo,
-  useTodos,
-  useUpdateTodo,
-} from './api/todos';
+import { type Todo, useCreateTodo, useDeleteTodo, useTodos, useUpdateTodo } from './api/todos';
 
 const App: FC = () => {
   const [newTodoText, setNewTodoText] = useState('');
