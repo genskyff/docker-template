@@ -5,7 +5,12 @@ import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 const isDocker = process.env.DOCKER_ENV === 'true';
 
 export default defineConfig({
-  plugins: [pluginReact(), pluginTypeCheck()],
+  plugins: [
+    pluginReact({
+      reactCompiler: true,
+    }),
+    pluginTypeCheck(),
+  ],
   server: {
     proxy: [
       {
