@@ -33,9 +33,7 @@ jobs:
           working_directory: front
 
       - name: Install packages
-        run: |
-          corepack enable
-          pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Run check
         run: pnpm check
