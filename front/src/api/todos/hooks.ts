@@ -16,8 +16,8 @@ export const useCreateTodo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: CreateTodoInput) => todoApi.createTodo(input),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['todos'] });
     },
   });
 };
@@ -27,8 +27,8 @@ export const useUpdateTodo = () => {
   return useMutation({
     mutationFn: ({ id, input }: { id: string; input: UpdateTodoInput }) =>
       todoApi.updateTodo(id, input),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['todos'] });
     },
   });
 };
@@ -37,8 +37,8 @@ export const useDeleteTodo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => todoApi.deleteTodo(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['todos'] });
     },
   });
 };

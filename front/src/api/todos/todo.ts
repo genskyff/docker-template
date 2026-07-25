@@ -3,10 +3,10 @@ import type { CreateTodoInput, PaginationParams, Todo, UpdateTodoInput } from '.
 const createApi = (baseURL: string = '/api') => {
   const request = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
     const url = `${baseURL}${endpoint}`;
-    const headers = {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    };
+    const headers = new Headers(options.headers);
+    if (!headers.has('Content-Type')) {
+      headers.set('Content-Type', 'application/json');
+    }
 
     const config = {
       ...options,
