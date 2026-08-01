@@ -1,67 +1,36 @@
 import type { CreateTodoInput, PaginationParams, Todo, UpdateTodoInput } from './types';
 
-const createApi = (baseURL: string = '/api') => {
-  const request = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
-    const url = `${baseURL}${endpoint}`;
-    const headers = new Headers(options.headers);
-    if (!headers.has('Content-Type')) {
-      headers.set('Content-Type', 'application/json');
-    }
+const BASE_URL = '/api';
 
-    const config = {
-      ...options,
-      headers,
-    };
-
-    const response = await fetch(url, config);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    // For delete requests or empty responses
-    if (response.status === 204) {
-      return {} as T;
-    }
-
-    return response.json();
-  };
-
-  return {
-    getTodos: async (params?: PaginationParams): Promise<Todo[]> => {
-      const searchParams = new URLSearchParams();
-      if (params?.offset !== undefined) {
-        searchParams.append('offset', params.offset.toString());
-      }
-      if (params?.limit !== undefined) {
-        searchParams.append('limit', params.limit.toString());
-      }
-      const queryString = searchParams.toString() ? `?${searchParams.toString()}` : '';
-      return request<Todo[]>(`/todos${queryString}`);
-    },
-
-    createTodo: async (input: CreateTodoInput): Promise<Todo> => {
-      return request<Todo>('/todos', {
-        method: 'POST',
-        body: JSON.stringify(input),
-      });
-    },
-
-    updateTodo: async (id: string, input: UpdateTodoInput): Promise<Todo> => {
-      return request<Todo>(`/todos/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(input),
-      });
-    },
-
-    deleteTodo: async (id: string): Promise<void> => {
-      await request<void>(`/todos/${id}`, {
-        method: 'DELETE',
-      });
-    },
-  };
+const toQuery = (params: PaginationParams = {}) => {
+  const entries = Object.entries(params).filter(([, value]) => value !== undefined);
+  const search = new URLSearchParams(entries.map(([key, value]) => [key, String(value)]));
+  return entries.length ? `?${search}` : '';
 };
 
-export const createTodoApi = (baseURL?: string) => createApi(baseURL);
+const request = async <T>(endpoint: string, options?: RequestInit): Promise<T> => {
+  const headers = new Headers(options?.headers);
+  if (!headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
 
-export type TodoApi = ReturnType<typeof createTodoApi>;
+  const response = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.status === 204 ? (undefined as T) : response.json();
+};
+
+export const todoApi = {
+  getTodos: (params?: PaginationParams) => request<Todo[]>(`/todos${toQuery(params)}`),
+
+  createTodo: (input: CreateTodoInput) =>
+    request<Todo>('/todos', { method: 'POST', body: JSON.stringify(input) }),
+
+  updateTodo: (id: string, input: UpdateTodoInput) =>
+    request<Todo>(`/todos/${id}`, { method: 'PATCH', body: JSON.stringify(input) }),
+
+  deleteTodo: (id: string) => request<void>(`/todos/${id}`, { method: 'DELETE' }),
+};
