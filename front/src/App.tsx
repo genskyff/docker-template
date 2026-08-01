@@ -1,77 +1,40 @@
-import { type FC, useState } from 'react';
+import { Info, ListTodo } from 'lucide-react';
+import type { FC } from 'react';
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
 
-import { type Todo, useCreateTodo, useDeleteTodo, useTodos, useUpdateTodo } from './api/todos';
+import reactLogo from '@/assets/react.svg';
+import About from '@/pages/About';
+import Todos from '@/pages/Todos';
 
-const App: FC = () => {
-  const [newTodoText, setNewTodoText] = useState('');
-  const { data: todos = [], isLoading, error } = useTodos();
-  const createTodoMutation = useCreateTodo();
-  const updateTodoMutation = useUpdateTodo();
-  const deleteTodoMutation = useDeleteTodo();
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  isActive ? 'btn btn-ghost btn-sm btn-active' : 'btn btn-ghost btn-sm';
 
-  const handleCreateTodo = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTodoText.trim()) return;
+const App: FC = () => (
+  <BrowserRouter>
+    <div className="bg-base-200 min-h-screen">
+      <header className="navbar bg-base-100 shadow-sm">
+        <div className="mx-auto flex w-full max-w-2xl items-center gap-2">
+          <img src={reactLogo} alt="" className="size-6" />
+          <span className="flex-1 font-semibold">Docker Template</span>
+          <NavLink to="/" className={navLinkClass}>
+            <ListTodo size={16} />
+            Todos
+          </NavLink>
+          <NavLink to="/about" className={navLinkClass}>
+            <Info size={16} />
+            About
+          </NavLink>
+        </div>
+      </header>
 
-    createTodoMutation.mutate(
-      { text: newTodoText },
-      {
-        onSuccess: () => {
-          setNewTodoText('');
-        },
-      },
-    );
-  };
-
-  const handleUpdateTodo = (id: string, completed: boolean) => {
-    updateTodoMutation.mutate({ id, input: { completed } });
-  };
-
-  const handleDeleteTodo = (id: string) => {
-    deleteTodoMutation.mutate(id);
-  };
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading todos</div>;
-
-  return (
-    <div>
-      <h1>Todo List</h1>
-      <form onSubmit={handleCreateTodo}>
-        <input
-          type="text"
-          value={newTodoText}
-          onChange={(e) => setNewTodoText(e.target.value)}
-          placeholder="Enter new todo"
-          disabled={createTodoMutation.isPending}
-        />
-        <button type="submit" disabled={createTodoMutation.isPending}>
-          {createTodoMutation.isPending ? 'Adding...' : 'Add Todo'}
-        </button>
-      </form>
-      <ul>
-        {todos.map((todo: Todo) => (
-          <li key={todo.id}>
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => handleUpdateTodo(todo.id, !todo.completed)}
-            />
-            <span
-              style={{
-                textDecoration: todo.completed ? 'line-through' : 'none',
-              }}
-            >
-              {todo.text}
-            </span>
-            <button type="button" onClick={() => handleDeleteTodo(todo.id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+      <main className="mx-auto max-w-2xl p-4">
+        <Routes>
+          <Route path="/" element={<Todos />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </main>
     </div>
-  );
-};
+  </BrowserRouter>
+);
 
 export default App;
