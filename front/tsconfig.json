@@ -10,7 +10,6 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strict": true,
 
     // Modules
     "allowImportingTsExtensions": true,
@@ -20,15 +19,13 @@
       "@/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": ["@rsbuild/core/types", "node"],
 
     // Emit
     "noEmit": true,
-    "removeComments": true,
 
     // Interop Constraints
     "erasableSyntaxOnly": true,
-    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
 
@@ -36,7 +33,7 @@
     "jsx": "react-jsx",
     "lib": ["dom", "esnext"],
     "moduleDetection": "force",
-    "useDefineForClassFields": true,
+    "target": "esnext",
 
     // Completeness
     "skipLibCheck": true
