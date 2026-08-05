@@ -1,15 +1,12 @@
 {
   "folders": [
     {
-      "name": "Root",
       "path": ".",
     },
     {
-      "name": "Front",
       "path": "./front",
     },
     {
-      "name": "Server",
       "path": "./server",
     },
   ],
