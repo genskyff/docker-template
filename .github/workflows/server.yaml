@@ -12,11 +12,14 @@ on:
       - server/**
       - .github/workflows/server.yaml
 
+permissions:
+  contents: read
+
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
 
     defaults:
@@ -39,10 +42,10 @@ jobs:
         run: cargo fmt -- --check
 
       - name: Run clippy
-        run: cargo clippy
-
-      - name: Run build
-        run: cargo build --verbose
+        run: cargo clippy --all-targets -- -D warnings
 
       - name: Run test
         run: cargo test --verbose
+
+      - name: Run build
+        run: cargo build --locked --verbose
