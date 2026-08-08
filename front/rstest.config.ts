@@ -4,4 +4,5 @@ import { defineConfig } from '@rstest/core';
 // Docs: https://rstest.rs/config/
 export default defineConfig({
   extends: withRsbuildConfig(),
+  testEnvironment: 'node',
 });
