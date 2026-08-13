@@ -13,31 +13,31 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.4",
-    "core-js": "^3.49.0",
+    "core-js": "^3.50.0",
     "lodash-es": "^4.18.1",
-    "lucide-react": "^1.28.0",
+    "lucide-react": "^1.31.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router": "^8.3.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@rsbuild/core": "^2.1.9",
+    "@rsbuild/core": "^2.1.11",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rsbuild/plugin-tailwindcss": "^2.0.3",
     "@rsbuild/plugin-type-check": "^1.6.0",
-    "@rstest/adapter-rsbuild": "^0.11.5",
-    "@rstest/core": "^0.11.5",
+    "@rstest/adapter-rsbuild": "^0.11.6",
+    "@rstest/core": "^0.11.6",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "daisyui": "^5.7.15",
-    "oxfmt": "^0.62.0",
-    "oxlint": "^1.77.0",
+    "daisyui": "^5.7.16",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "oxlint-tsgolint": "^7.0.2001",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2"
   },
-  "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee"
+  "packageManager": "pnpm@11.21.0+sha512.521705bce689924eac72f5a3587122f362689ef6571e55ba80076fd637c11132ecffada26fad4ea79c485bfddbfd3d5a2a5b05805a77e893de71ec8a6cca3bb1"
 }
