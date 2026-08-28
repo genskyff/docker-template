@@ -9,14 +9,15 @@
     "typeAware": true,
     "typeCheck": true
   },
-  "rules": {
-    "react/button-has-type": "error",
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  },
   "env": {
     "builtin": true,
     "browser": true,
     "node": true
+  },
+  "rules": {
+    "no-undef": "error",
+    "react/button-has-type": "error",
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
   }
 }
