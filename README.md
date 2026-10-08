@@ -12,7 +12,6 @@ docker compose up -d
 - Frontend: http://localhost:3000
 - Server: http://localhost:3100
 
-
 ## Features
 
 - **Docker-based development**: No need to install Runtime dependencies locally
