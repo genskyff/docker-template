@@ -12,32 +12,32 @@
     "fix": "oxlint --fix && oxfmt"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.103.1",
+    "@tanstack/react-query": "^5.104.1",
     "core-js": "^3.50.0",
     "lodash-es": "^4.18.1",
-    "lucide-react": "^1.47.0",
+    "lucide-react": "^1.52.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router": "^8.4.0",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@rsbuild/core": "^2.2.8",
-    "@rsbuild/plugin-react": "^2.1.0",
+    "@rsbuild/core": "^2.2.12",
+    "@rsbuild/plugin-react": "^2.1.1",
     "@rsbuild/plugin-tailwindcss": "^2.0.3",
     "@rsbuild/plugin-type-check": "^1.6.0",
-    "@rstest/adapter-rsbuild": "^0.12.0",
-    "@rstest/core": "^0.12.0",
+    "@rstest/adapter-rsbuild": "^0.12.3",
+    "@rstest/core": "^0.12.3",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^26.6.1",
+    "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "daisyui": "^5.7.40",
-    "oxfmt": "^0.68.0",
-    "oxlint": "^1.83.0",
-    "oxlint-tsgolint": "^7.0.2002",
+    "daisyui": "^5.7.47",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "oxlint-tsgolint": "^7.0.2003",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2"
   },
-  "packageManager": "pnpm@12.5.1+sha512.e3f305bc784a2bc89f5ad3b6138889470fae8d2af5f36b61216ec91c2c3d64089775f9de38aac331044ea40f245cb0d5666392dfdf65824e1907ef6a2c62de5f"
+  "packageManager": "pnpm@12.10.1+sha512.ba40a37eb1a370d60fea8c4cf1d364c13bcccef518e98ad2bcee954f539d38da37458e58261a3fa55e06523450ea0ffff9f497b135be41f2c15c1642bacace6c"
 }
