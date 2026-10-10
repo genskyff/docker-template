@@ -30,14 +30,14 @@ retry button.
 
 ## Scripts
 
-| Command        | Description                        |
-| -------------- | ---------------------------------- |
-| `pnpm dev`     | Start the dev server               |
-| `pnpm build`   | Build for production               |
-| `pnpm preview` | Serve the production build locally |
-| `pnpm test`    | Run test                           |
-| `pnpm check`   | Lint and verify formatting         |
-| `pnpm fix`     | Lint and format, writing fixes     |
+| Command        | Description                            |
+| -------------- | -------------------------------------- |
+| `pnpm dev`     | Start the dev server                   |
+| `pnpm build`   | Build for production                   |
+| `pnpm preview` | Serve the production build locally     |
+| `pnpm test`    | Run tests with Rstest                  |
+| `pnpm check`   | Lint, type check and verify formatting |
+| `pnpm fix`     | Lint and format, writing fixes         |
 
 ## Layout
 
