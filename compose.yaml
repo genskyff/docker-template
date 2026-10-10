@@ -37,13 +37,14 @@ services:
       - rust-target:/app-server/target
 
   app-front:
-    image: node:lts-trixie-slim
+    build: ./front
+    image: app-front:latest
+    pull_policy: never
     working_dir: /app-front
-    command: sh -c 'corepack enable && pnpm install && pnpm rsbuild --host 0.0.0.0'
+    command: sh -c 'pnpm install && pnpm rsbuild --host 0.0.0.0'
     depends_on:
       - app-server
     environment:
-      - COREPACK_ENABLE_DOWNLOAD_PROMPT
       - DOCKER_ENV
       - NODE_ENV
     ports:

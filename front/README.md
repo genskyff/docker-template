@@ -16,10 +16,11 @@ A React + TypeScript app built on Rsbuild, talking to the server over `/api`.
 ## Getting Started
 
 The usual entry point is `docker compose up -d` from the repository root, which runs
-this app together with the server. To work on the frontend alone, Node.js 24 or later:
+this app together with the server. To work on the frontend alone, Node.js and pnpm are
+managed by [mise](https://mise.jdx.dev/):
 
 ```shell
-corepack enable
+mise install
 pnpm install
 ```
 
