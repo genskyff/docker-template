@@ -1,4 +1,3 @@
 {
-  "editor.defaultFormatter": "oxc.oxc-vscode",
   "css.customData": [".vscode/css-custom-data.json"]
 }
