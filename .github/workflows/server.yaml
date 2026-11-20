@@ -17,10 +17,28 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
+  POSTGRES_DB: app
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: password
 
 jobs:
   check:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 5
 
     defaults:
       run:
@@ -49,3 +67,5 @@ jobs:
 
       - name: Run test
         run: cargo test
+        env:
+          DATABASE_URL: postgres://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@localhost:5432/${{ env.POSTGRES_DB }}

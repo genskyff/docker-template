@@ -54,8 +54,14 @@ async fn main() {
         .await
         .expect("can't run database migrations");
 
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3100").await.unwrap();
+    tracing::debug!("listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app(db)).await.unwrap();
+}
+
+fn app(db: PgPool) -> Router {
     // Compose the routes
-    let app = Router::new()
+    Router::new()
         .route("/api/todos", get(todos_index).post(todos_create))
         .route("/api/todos/{id}", patch(todos_update).delete(todos_delete))
         // Add middleware to all routes
@@ -75,11 +81,7 @@ async fn main() {
                 .layer(TraceLayer::new_for_http())
                 .into_inner(),
         )
-        .with_state(db);
-
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3100").await.unwrap();
-    tracing::debug!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(listener, app).await.unwrap();
+        .with_state(db)
 }
 
 // The query parameters for todos index
@@ -199,8 +201,70 @@ fn not_found() -> AppError {
 }
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
+#[cfg_attr(test, derive(Deserialize, PartialEq))]
 struct Todo {
     id: Uuid,
     text: String,
     completed: bool,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use axum::body::{Body, Bytes, to_bytes};
+    use axum::http::{Method, Request, header};
+    use tower::ServiceExt;
+
+    async fn send(
+        app: &Router,
+        method: Method,
+        uri: &str,
+        json: &'static str,
+    ) -> (StatusCode, Bytes) {
+        let request = Request::builder()
+            .method(method)
+            .uri(uri)
+            .header(header::CONTENT_TYPE, "application/json")
+            .body(Body::from(json))
+            .unwrap();
+        let response = app.clone().oneshot(request).await.unwrap();
+        let status = response.status();
+        let body = to_bytes(response.into_body(), usize::MAX).await.unwrap();
+        (status, body)
+    }
+
+    #[sqlx::test]
+    async fn todo_lifecycle(db: PgPool) {
+        let app = app(db);
+
+        let (status, body) = send(
+            &app,
+            Method::POST,
+            "/api/todos",
+            r#"{"text":"Write tests"}"#,
+        )
+        .await;
+        assert_eq!(status, StatusCode::CREATED);
+        let Json(created) = Json::<Todo>::from_bytes(&body).unwrap();
+        assert_eq!(created.text, "Write tests");
+        assert!(!created.completed);
+        let uri = format!("/api/todos/{}", created.id);
+
+        let (status, _) = send(&app, Method::PATCH, &uri, r#"{"completed":true}"#).await;
+        assert_eq!(status, StatusCode::OK);
+
+        let (status, body) = send(&app, Method::GET, "/api/todos", "").await;
+        assert_eq!(status, StatusCode::OK);
+        let Json(todos) = Json::<Vec<Todo>>::from_bytes(&body).unwrap();
+        let updated = Todo {
+            completed: true,
+            ..created
+        };
+        assert_eq!(todos, [updated]);
+
+        let (status, _) = send(&app, Method::DELETE, &uri, "").await;
+        assert_eq!(status, StatusCode::NO_CONTENT);
+        let (status, _) = send(&app, Method::DELETE, &uri, "").await;
+        assert_eq!(status, StatusCode::NOT_FOUND);
+    }
 }
