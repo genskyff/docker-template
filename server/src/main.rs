@@ -2,10 +2,10 @@
 //!
 //! API will be:
 //!
-//! - `GET /todos`: return a JSON list of Todos.
-//! - `POST /todos`: create a new Todo.
-//! - `PATCH /todos/{id}`: update a specific Todo.
-//! - `DELETE /todos/{id}`: delete a specific Todo.
+//! - `GET /api/todos`: return a JSON list of Todos.
+//! - `POST /api/todos`: create a new Todo.
+//! - `PATCH /api/todos/{id}`: update a specific Todo.
+//! - `DELETE /api/todos/{id}`: delete a specific Todo.
 
 use axum::{
     Json, Router,
