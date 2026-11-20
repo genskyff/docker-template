@@ -10,16 +10,16 @@ const TodoItem: FC<{ todo: Todo }> = ({ todo }) => {
 
   return (
     <li className="flex items-center gap-3 py-2">
-      <input
-        type="checkbox"
-        className="checkbox checkbox-sm"
-        checked={todo.completed}
-        disabled={updateTodo.isPending}
-        onChange={() => updateTodo.mutate({ id: todo.id, input: { completed: !todo.completed } })}
-      />
-      <span className={todo.completed ? 'flex-1 line-through opacity-50' : 'flex-1'}>
-        {todo.text}
-      </span>
+      <label className="flex flex-1 cursor-pointer items-center gap-3">
+        <input
+          type="checkbox"
+          className="checkbox checkbox-sm"
+          checked={todo.completed}
+          disabled={updateTodo.isPending}
+          onChange={() => updateTodo.mutate({ id: todo.id, input: { completed: !todo.completed } })}
+        />
+        <span className={todo.completed ? 'line-through opacity-50' : undefined}>{todo.text}</span>
+      </label>
       <button
         type="button"
         className="btn btn-ghost btn-sm btn-square"
@@ -63,6 +63,7 @@ const Todos: FC = () => {
             type="text"
             className="input flex-1"
             placeholder="What needs to be done?"
+            aria-label="New todo"
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
           />
