@@ -47,6 +47,7 @@ services:
     environment:
       - DOCKER_ENV
       - NODE_ENV
+    init: true
     ports:
       - 3000:3000
     stdin_open: true
