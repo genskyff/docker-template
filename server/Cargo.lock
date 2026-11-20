@@ -22,6 +22,7 @@ name = "app-server"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "dotenvy",
  "mimalloc",
  "serde",
  "sqlx",

@@ -29,6 +29,12 @@ static GLOBAL: MiMalloc = MiMalloc;
 
 #[tokio::main]
 async fn main() {
+    if let Err(error) = dotenvy::dotenv()
+        && !error.not_found()
+    {
+        panic!("can't load .env: {error}");
+    }
+
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {

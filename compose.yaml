@@ -24,7 +24,7 @@ services:
       app-db:
         condition: service_healthy
     environment:
-      - DATABASE_URL
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@app-db:5432/${POSTGRES_DB}
       - RUST_BACKTRACE
       - RUST_LOG
     ports:
