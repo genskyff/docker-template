@@ -55,11 +55,9 @@ services:
     volumes:
       - ./front:/app-front:cached
       - node-modules:/app-front/node_modules
-      - pnpm-store:/app-front/.pnpm-store
 
 volumes:
   postgres-data:
   cargo-registry:
   rust-target:
   node-modules:
-  pnpm-store:
