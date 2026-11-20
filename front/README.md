@@ -10,7 +10,7 @@ A React + TypeScript app built on Rsbuild, talking to the server over `/api`.
 - **Tailwind CSS & daisyUI**: Utility-first styling with themed components.
 - **TanStack Query**: Server state, caching and invalidation.
 - **React Router, Zustand, Lucide, Lodash**: Routing, client state, icons, utilities.
-- **Rstest**: Rspack-powered test runner, reusing the Rsbuild config.
+- **Rstest & Testing Library**: Unit and component tests in happy-dom, colocated with the source.
 - **Oxlint & Oxfmt**: Rust-based linter and formatter.
 
 ## Getting Started

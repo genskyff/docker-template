@@ -19,7 +19,7 @@
       "@/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["@rsbuild/core/types", "node"],
+    "types": ["@rsbuild/core/types", "node", "@testing-library/jest-dom"],
 
     // Emit
     "noEmit": true,
